@@ -65,7 +65,8 @@ module FixtureBuilder
           if @record_names[table_name]
             count = @record_names[table_name].select {|name| name.to_s.starts_with?(inferred_name) }.size
           end
-          return count.zero? ? inferred_name : "#{inferred_name}_#{count}"
+          #return count.zero? ? inferred_name : "#{inferred_name}_#{count}"
+          return inferred_name 
         end
       end
       [table_name, row_index.succ!].join('_')
