@@ -70,7 +70,7 @@ module FixtureBuilder
           end
           dup_count = @record_dup_counts[table_name][inferred_name]
           @record_dup_counts[table_name][inferred_name] += 1
-          return dup_count.zero? ? inferred_name : "#{inferred_name}_#{count}"
+          return dup_count.zero? ? inferred_name : "#{inferred_name}_#{dup_count}"
         end
       end
       [table_name, row_index.succ!].join('_')
