@@ -7,6 +7,7 @@ module FixtureBuilder
       @custom_names = {}
       @model_name_procs = {}
       @record_names = {}
+      @record_dup_counts = {}
     end
 
     def name_model_with(model_class, &block)
@@ -58,15 +59,18 @@ module FixtureBuilder
 
     protected
     def inferred_record_name(record_hash, table_name, row_index)
+
+      
+
       record_name_fields.each do |try|
         if name = record_hash[try]
           inferred_name = name.underscore.gsub(/\W/, ' ').squeeze(' ').tr(' ', '_')
-          count = 0
-          if @record_names[table_name]
-            count = @record_names[table_name].select {|name| name.to_s.starts_with?(inferred_name) }.size
+          if @record_dup_counts[table_name].nil?
+            @record_dup_counts[table_name] = Hash.new(0)
           end
-          #return count.zero? ? inferred_name : "#{inferred_name}_#{count}"
-          return inferred_name 
+          dup_count = @record_dup_counts[table_name][inferred_name]
+          @record_dup_counts[table_name][inferred_name] += 1
+          return dup_count.zero? ? inferred_name : "#{inferred_name}_#{count}"
         end
       end
       [table_name, row_index.succ!].join('_')
